@@ -56,64 +56,7 @@ public class TraversalProgram {
 
     // PUT YOUR OWN METHODS HERE
 
-    /*      */   public void doTheBFS(boolean paramBoolean1, boolean paramBoolean2)
-    /*      */   {
-    /*  122 */     if (paramBoolean2) {
-    /*  123 */       this.sortSteps = initWhiteCities();
-    /*  124 */       this.steps = this.sortSteps;
-    /*      */     }
-    /*      */     else
-    /*      */     {
-    /*  128 */       initWhiteCities();
-    /*      */     }
-    /*      */ 
-    /*  131 */     CityQueue localCityQueue = new CityQueue();
-    /*      */     int i;
-    /*  133 */     while ((i = getNextWhiteCity()) > -1) {
-    /*  134 */       City localCity1 = this.cities[i];
-    /*  135 */       localCityQueue.enqueue(localCity1);
-    /*  136 */       this.whiteCities[i] = -1;
-    /*  137 */       localCity1.setCostTo(0.0D);
-    /*  138 */       while (!localCityQueue.isEmpty()) {
-    /*  139 */         localCity1 = localCityQueue.dequeue();
-    /*      */ 
-    /*  142 */         for (int j = 0; j < localCity1.getRoutes().length; j++)
-    /*      */         {
-    /*      */           Route localRoute;
-    /*  143 */           if (paramBoolean2) {
-    /*  144 */             localRoute = localCity1.getSortedRoutes()[j];
-    /*      */           }
-    /*      */           else
-    /*      */           {
-    /*  148 */             localRoute = localCity1.getRoutes()[j];
-    /*      */           }
-    /*  150 */           this.steps += 1;
-    /*      */           City localCity2;
-    /*  151 */           if (this.cities[localRoute.getDestination()].getCostTo() == -1) {
-    /*  152 */             localCity2 = this.cities[localRoute.getDestination()];
-    /*  153 */             localCityQueue.enqueue(localCity2);
-    /*  154 */             this.whiteCities[localRoute.getDestination()] = -1;
-    /*  155 */             localCity2.setCostTo(localCity1.getCostTo() + localRoute.getCost());
-    /*  156 */             localCity2.setPathToVia(localCity1, localRoute);
-    /*      */           }
-    /*  161 */           else if (paramBoolean1)
-    /*      */           {
-    /*  163 */             if (this.cities[localRoute.getDestination()].getCostTo() > localCity1.getCostTo() + localRoute.getCost()) {
-    /*  164 */               localCity2 = this.cities[localRoute.getDestination()];
-    /*  165 */               if (!localCity2.getProcessingStatus())
-    /*      */               {
-    /*  170 */                 localCityQueue.enqueue(localCity2);
-    /*      */               }
-    /*      */ 
-    /*  174 */               localCity2.setCostTo(localCity1.getCostTo() + localRoute.getCost());
-    /*  175 */               localCity2.setPathToVia(localCity1, localRoute);
-    /*      */             }
-    /*      */           }
-    /*      */         }
-    /*      */       }
-    /*      */     }
-    /*      */   }
-	public void DFS() {
+    public void DFS() {
 		Route route = null;
 		initWhiteCities();
 		CityStack cityStack = new CityStack();
