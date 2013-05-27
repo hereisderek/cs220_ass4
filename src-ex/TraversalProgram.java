@@ -55,10 +55,362 @@ public class TraversalProgram {
     }
 
     // PUT YOUR OWN METHODS HERE
+
+    /*      */   public void doTheBFS(boolean paramBoolean1, boolean paramBoolean2)
+    /*      */   {
+    /*  122 */     if (paramBoolean2) {
+    /*  123 */       this.sortSteps = initWhiteCities();
+    /*  124 */       this.steps = this.sortSteps;
+    /*      */     }
+    /*      */     else
+    /*      */     {
+    /*  128 */       initWhiteCities();
+    /*      */     }
+    /*      */ 
+    /*  131 */     CityQueue localCityQueue = new CityQueue();
+    /*      */     int i;
+    /*  133 */     while ((i = getNextWhiteCity()) > -1) {
+    /*  134 */       City localCity1 = this.cities[i];
+    /*  135 */       localCityQueue.enqueue(localCity1);
+    /*  136 */       this.whiteCities[i] = -1;
+    /*  137 */       localCity1.setCostTo(0.0D);
+    /*  138 */       while (!localCityQueue.isEmpty()) {
+    /*  139 */         localCity1 = localCityQueue.dequeue();
+    /*      */ 
+    /*  142 */         for (int j = 0; j < localCity1.getRoutes().length; j++)
+    /*      */         {
+    /*      */           Route localRoute;
+    /*  143 */           if (paramBoolean2) {
+    /*  144 */             localRoute = localCity1.getSortedRoutes()[j];
+    /*      */           }
+    /*      */           else
+    /*      */           {
+    /*  148 */             localRoute = localCity1.getRoutes()[j];
+    /*      */           }
+    /*  150 */           this.steps += 1;
+    /*      */           City localCity2;
+    /*  151 */           if (this.cities[localRoute.getDestination()].getCostTo() == -1) {
+    /*  152 */             localCity2 = this.cities[localRoute.getDestination()];
+    /*  153 */             localCityQueue.enqueue(localCity2);
+    /*  154 */             this.whiteCities[localRoute.getDestination()] = -1;
+    /*  155 */             localCity2.setCostTo(localCity1.getCostTo() + localRoute.getCost());
+    /*  156 */             localCity2.setPathToVia(localCity1, localRoute);
+    /*      */           }
+    /*  161 */           else if (paramBoolean1)
+    /*      */           {
+    /*  163 */             if (this.cities[localRoute.getDestination()].getCostTo() > localCity1.getCostTo() + localRoute.getCost()) {
+    /*  164 */               localCity2 = this.cities[localRoute.getDestination()];
+    /*  165 */               if (!localCity2.getProcessingStatus())
+    /*      */               {
+    /*  170 */                 localCityQueue.enqueue(localCity2);
+    /*      */               }
+    /*      */ 
+    /*  174 */               localCity2.setCostTo(localCity1.getCostTo() + localRoute.getCost());
+    /*  175 */               localCity2.setPathToVia(localCity1, localRoute);
+    /*      */             }
+    /*      */           }
+    /*      */         }
+    /*      */       }
+    /*      */     }
+    /*      */   }
+	public void DFS() {
+		Route route = null;
+		initWhiteCities();
+		CityStack cityStack = new CityStack();
+		int getNextWhiteCityIndex = 0;
+		while ((getNextWhiteCityIndex = getNextWhiteCity()) > -1) {
+			City city = cities[getNextWhiteCityIndex];
+			cityStack.push(cities[getNextWhiteCityIndex]);
+			// grey this city
+			whiteCities[getNextWhiteCityIndex] = -1;
+			// TODO: i dont get this
+			city.setCostTo(0);
+			while (!cityStack.isEmpty()) {
+				city = cityStack.getStackTop();
+				int otherPath = 0;
+				// go through every route in the city
+				for (int i = city.getLastRouteChecked() + 1; i < city.getRoutes().length; i++) {
+
+					route = city.getRoutes()[i];
+					// set as checked
+					city.setLastRouteChecked(i);
+					steps++;
+					// still white
+					// if (cef){
+					if (cities[route.getDestination()].getCostTo() < 0){
+						otherPath = 1;
+						break;
+					}
+				}
+				if (otherPath != 0){
+					City city2 = cities[route.getDestination()];
+					city2.setLastRouteChecked(-1);
+					cityStack.push(city2);
+					whiteCities[route.getDestination()] = -1;
+					city2.setCostTo(city.getCostTo() + route.getCost());
+					city2.setPathToVia(city, route);
+				} else {
+					cityStack.pop();
+				}
+			}
+
+		}
+	}
+	public void DFS2() {
+		Route route = null;
+		sortSteps = initWhiteCities();
+		steps = sortSteps;
+		
+		CityStack cityStack = new CityStack();
+		int getNextWhiteCityIndex = 0;
+		while ((getNextWhiteCityIndex = getNextWhiteCity()) > -1) {
+			City city = cities[getNextWhiteCityIndex];
+			cityStack.push(cities[getNextWhiteCityIndex]);
+			// grey this city
+			whiteCities[getNextWhiteCityIndex] = -1;
+			// TODO: i dont get this
+			city.setCostTo(0);
+			while (!cityStack.isEmpty()) {
+				city = cityStack.getStackTop();
+				int otherPath = 0;
+				// go through every route in the city
+				for (int i = city.getLastRouteChecked() + 1; i < city.getRoutes().length; i++) {
+
+					route = city.getSortedRoutes()[i];
+					// set as checked
+					city.setLastRouteChecked(i);
+					steps++;
+					// still white
+					// if (cef){
+					if (cities[route.getDestination()].getCostTo() < 0){
+						otherPath = 1;
+						break;
+					}
+				}
+				if (otherPath != 0){
+					City city2 = cities[route.getDestination()];
+					city2.setLastRouteChecked(-1);
+					cityStack.push(city2);
+					whiteCities[route.getDestination()] = -1;
+					city2.setCostTo(city.getCostTo() + route.getCost());
+					city2.setPathToVia(city, route);
+				} else {
+					cityStack.pop();
+				}
+			}
+
+		}
+	}
+	public void DFS3() {
+		Route route = null;
+		initWhiteCities();
+		CityStack cityStack = new CityStack();
+		int getNextWhiteCityIndex = 0;
+		while ((getNextWhiteCityIndex = getNextWhiteCity()) > -1) {
+			City city = cities[getNextWhiteCityIndex];
+			cityStack.push(cities[getNextWhiteCityIndex]);
+			// grey this city
+			whiteCities[getNextWhiteCityIndex] = -1;
+			// TODO: i dont get this
+			city.setCostTo(0);
+			while (!cityStack.isEmpty()) {
+				city = cityStack.getStackTop();
+				int otherPath = 0;
+				// go through every route in the city
+				for (int i = city.getLastRouteChecked() + 1; i < city.getRoutes().length; i++) {
+
+					route = city.getRoutes()[i];
+					// set as checked
+					city.setLastRouteChecked(i);
+					steps++;
+					// still white
+					// if (cef){
+					if (cities[route.getDestination()].getCostTo() < 0){
+						otherPath = 1;
+						break;
+					}
+					if (cities[route.getDestination()].getCostTo() > city.getCostTo() + route.getCost()){
+						otherPath = 1;
+						cities[route.getDestination()].setLastRouteChecked(-1);
+						break;
+					}
+				}
+				if (otherPath != 0){
+					City city2 = cities[route.getDestination()];
+					city2.setLastRouteChecked(-1);
+					cityStack.push(city2);
+					whiteCities[route.getDestination()] = -1;
+					city2.setCostTo(city.getCostTo() + route.getCost());
+					city2.setPathToVia(city, route);
+				} else {
+					cityStack.pop();
+				}
+			}
+
+		}
+	}
+	public void DFS4() {
+		Route route = null;
+		sortSteps = initWhiteCities();
+		steps = sortSteps;
+		CityStack cityStack = new CityStack();
+		int getNextWhiteCityIndex = 0;
+		while ((getNextWhiteCityIndex = getNextWhiteCity()) > -1) {
+			City city = cities[getNextWhiteCityIndex];
+			cityStack.push(cities[getNextWhiteCityIndex]);
+			// grey this city
+			whiteCities[getNextWhiteCityIndex] = -1;
+			// TODO: i dont get this
+			city.setCostTo(0);
+			while (!cityStack.isEmpty()) {
+				city = cityStack.getStackTop();
+				int otherPath = 0;
+				// go through every route in the city
+				for (int i = city.getLastRouteChecked() + 1; i < city.getRoutes().length; i++) {
+
+					route = city.getSortedRoutes()[i];
+					// set as checked
+					city.setLastRouteChecked(i);
+					steps++;
+					// still white
+					// if (cef){
+					if (cities[route.getDestination()].getCostTo() < 0){
+						otherPath = 1;
+						break;
+					}
+					if (cities[route.getDestination()].getCostTo() > city.getCostTo() + route.getCost()){
+						otherPath = 1;
+						cities[route.getDestination()].setLastRouteChecked(-1);
+						break;
+					}
+				}
+				if (otherPath != 0){
+					City city2 = cities[route.getDestination()];
+					city2.setLastRouteChecked(-1);
+					cityStack.push(city2);
+					whiteCities[route.getDestination()] = -1;
+					city2.setCostTo(city.getCostTo() + route.getCost());
+					city2.setPathToVia(city, route);
+				} else {
+					cityStack.pop();
+				}
+			}
+
+		}
+	}
+	
+	public void myDFS(boolean cef, boolean po){
+    	Route route = null;
+    	
+    	if ( po ){
+    		this.sortSteps = initWhiteCities();
+    		this.steps = sortSteps;
+    	} else {
+    		initWhiteCities();
+    	}
+    	CityStack cityStack = new CityStack();
+    	int currentWhiteCityIndex;
+    	while ( ( currentWhiteCityIndex = getNextWhiteCity() ) != -1 ){
+    		City city = cities[currentWhiteCityIndex];
+    		cityStack.push(cities[currentWhiteCityIndex]);
+//    		 grey this city
+    		whiteCities[currentWhiteCityIndex] = -1;
+//    		 TODO: i dont get this
+//    		 set cost to auckland to 0
+    		city.setCostTo(0);
+    		while (!cityStack.isEmpty()){
+    			// stack is not empty
+    			// get routes
+    			for (int i = city.getLastRouteChecked()+1; i < city.getRoutes().length; i++){
+    				if (po){
+    					route = city.getSortedRoutes()[i];
+    				} else {
+    					route = city.getRoutes()[i];
+    				}
+    				city.setLastRouteChecked(i);
+    				// increase step
+    				steps ++;
+    				// if des still white
+    				
+    			}
+    		}
+    	}
+	}
+    public void doDFS(boolean cef, boolean po){
+    	Route route = null;
+    	
+    	if ( po ){
+    		this.sortSteps = initWhiteCities();
+    		this.steps = sortSteps;
+    	} else {
+    		initWhiteCities();
+    	}
+    	CityStack cityStack = new CityStack();
+    	int currentWhiteCityIndex;
+    	while ( ( currentWhiteCityIndex = getNextWhiteCity() ) != -1 ){
+    		City city = cities[currentWhiteCityIndex];
+    		cityStack.push(cities[currentWhiteCityIndex]);
+    		// grey this city
+    		whiteCities[currentWhiteCityIndex] = -1;
+//    		 TODO: i dont get this
+    		// set cost to auckland to 0
+    		city.setCostTo(0);
+    		while (!cityStack.isEmpty()){
+    			city = cityStack.getStackTop();
+    			boolean noWhiteNeighbor = true;
+    			// go through every route in the city
+    			for (int i = city.getLastRouteChecked()+1; i < city.getRoutes().length; i++){
+    				if ( po ) {
+    					route = city.getSortedRoutes()[i];
+    				} else {
+    					route = city.getRoutes()[i];
+    				}
+    				// set as checked
+    				city.setLastRouteChecked(i);
+    				steps ++;
+    				if (cities[route.getDestination()].getCostTo() < 0){
+        				// still white
+    					noWhiteNeighbor = false;
+    					break;
+    				}
+    				// check for optimus
+    				if (cef){
+    					if (cities[route.getDestination()].getCostTo() > city.getCostTo() + route.getCost()){
+    						noWhiteNeighbor = false;
+    						cities[route.getDestination()].setLastRouteChecked(-1);
+    						break;
+    					}
+    				}
+    			}
+				if ( !noWhiteNeighbor ){
+					City city2 = cities[route.getDestination()];
+					city2.setLastRouteChecked(-1);
+					cityStack.push(city2);
+					whiteCities[route.getDestination()] = -1;
+					city2.setCostTo(city.getCostTo() + route.getCost());
+					city2.setPathToVia(city, route);
+				} else {
+					cityStack.pop();
+				}
+    		}
+    		
+    		
+    	}
+    }
     
+    public void doBFS(boolean cef, boolean po){
+    	Route route;
+    	CityQueue cq;
+    	
+    	initialiseCities();
+    	
+    	
+    	
+    }
     
-    
-    
+    public void doDijkstra(){
+
+    }    
     
     
     // This is a diagnostic method used by start()
@@ -130,38 +482,49 @@ public class TraversalProgram {
                 case 1:
                     System.out.println("*** Plain DFS ***");
                     // PUT YOUR METHOD CALL HERE
+                    doDFS(false, false);
+//                    DFS();
+//                    doTheBFS(false, false);
                     break;
                 case 2:
                     System.out.println("*** DFS with cheapest edge first ***");
                     // PUT YOUR METHOD CALL HERE
+                    doDFS(true, false);
                     break;
                 case 3:
                     System.out.println("*** DFS with path optimisation ***");
                     // PUT YOUR METHOD CALL HERE
+                    doDFS(false, true);
                     break;
                 case 4:
                     System.out.println("*** DFS with path optimisation and cheapest edge first ***");
                     // PUT YOUR METHOD CALL HERE
+                    doDFS(true, true);
                     break;
                 case 5:
                     System.out.println("*** Plain BFS ***");
                     // PUT YOUR METHOD CALL HERE
+                    doBFS(false, false);
                     break;
                 case 6:
                     System.out.println("*** BFS with cheapest edge first ***");
                     // PUT YOUR METHOD CALL HERE
+                    doBFS(true, false);
                     break;
                 case 7:
                     System.out.println("*** BFS with path optimisation ***");
                     // PUT YOUR METHOD CALL HERE
+                    doBFS(false, true);
                     break;
                 case 8:
                     System.out.println("*** BFS with path optimisation and cheapest edge first ***");
                     // PUT YOUR METHOD CALL HERE
+                    doBFS(true, true);
                     break;
                 case 9:
                     System.out.println("*** Dijkstra ***");
                     // OPTIONAL: PUT YOUR METHOD CALL HERE
+                    doDijkstra();
                     break;
                 case 0: return;
             }
